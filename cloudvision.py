@@ -1,27 +1,31 @@
-import io
-import os
+import requests
+import json
+import base64  # 画像はbase64でエンコードする必要があるため
 
-from google.cloud import vision
-from google.cloud.vision import types
+API_KEY = "APIのキーを記入"
 
-client = vision.ImageAnnotatorClient()
+def text_detection(image_path):
+    api_url = 'https://vision.googleapis.com/v1/images:annotate?key={}'.format(API_KEY)
+    with open(image_path, "rb") as img:
+        image_content = base64.b64encode(img.read())
+        req_body = json.dumps({
+            'requests': [{
+                'image': {
+                    'content': image_content.decode('utf-8')  # base64でエンコードしたものjsonにするためdecodeする
+                },
+                'features': [{
+                    'type': 'TEXT_DETECTION'
+                }]
+            }]
+        })
+        res = requests.post(api_url, data=req_body)
+        res_json = res.json()
+        res_text = res_json["responses"][0]["textAnnotations"][0]["description"]
 
-file_name = os.path.join(
-    os.path.dirname(__file__),
-    'leader.jpg')
+        return res_text
 
-with io.open(file_name, 'rb') as image_file:
-texts = response.text_annotations
-    content = image_file.read()
 
-image = types.Image(content=content)
-
-response = client.text_detection(image=image,max_results=5)
-
-print('Texts:')
-
-for text in texts:
-    message = '\n"{}"'.format(text.description)
-    print(message)
-    break
-
+if __name__ == "__main__":
+    img_path = "leader.jpg"
+    result = text_detection(img_path)
+    print(result)
