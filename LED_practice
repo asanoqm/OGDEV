@@ -1,0 +1,22 @@
+import RPi.GPIO as GPIO
+import time
+
+LED1_R = 10
+LED1_G = 9
+LED1_B = 11
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(LED1_R, GPIO.OUT)
+GPIO.setup(LED1_G, GPIO.OUT)
+GPIO.setup(LED1_B, GPIO.OUT)
+
+while True:
+    GPIO.output(LED1_R, GPIO.HIGH)
+    GPIO.output(LED1_G, GPIO.LOW)
+    GPIO.output(LED1_B, GPIO.HIGH)
+    time.sleep(1)
+    GPIO.output(LED1_R, GPIO.LOW)
+    GPIO.output(LED1_G, GPIO.HIGH)
+    GPIO.output(LED1_B, GPIO.LOW)
+    time.sleep(1)
