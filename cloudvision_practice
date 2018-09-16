@@ -1,0 +1,39 @@
+import requests
+import json
+import base64
+
+API_KEY = "(APIキーを入力"
+
+def text_detection(image_path):
+
+    api_url = 'https://vision.googleapis.com/v1/images:annotate?key={}'.format(API_KEY)
+    with open(image_path, "rb") as img:
+
+        image_content = base64.b64encode(img.read())
+        req_body = json.dumps({
+            'requests': [{
+                'image': {
+                    'content': image_content.decode('utf-8')
+                },
+                'features': [{
+                    'type': 'TEXT_DETECTION'
+                }]
+            }]
+        })
+        res = requests.post(api_url, data=req_body)
+        res_json = res.json()
+
+        if str(res_json["responses"]) == "[{}]":
+            print("there is no text")
+            res_text = "NoText"
+        else:
+            print("there is some text")
+            res_text = res_json["responses"][0]["textAnnotations"][0]["description"]
+
+        return res_text
+
+
+if __name__ == "__main__":
+    response = text_detection("image.jpg")
+    print(response)
+
