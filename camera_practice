@@ -1,0 +1,16 @@
+import picamera
+import time
+
+samplecam = picamera.PiCamera()
+
+#samplecam.brightness = 50
+#samplecam.rotation = 30
+#samplecam.resolution=(400, 300)
+
+samplecam.start_preview()
+time.sleep(5)
+samplecam.stop_preview()
+
+samplecam.capture('image.jpg')
+
+samplecam.close()
