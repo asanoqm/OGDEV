@@ -1,0 +1,14 @@
+import pygame.mixer as PyGame
+import time
+
+def speech(path):
+    PyGame.init()
+    #PyGame.music.load('oton_sounds/sound01_start.wav')
+    PyGame.music.load(path)
+    PyGame.music.play()
+
+    while PyGame.music.get_busy():
+        a = "b"
+
+if __name__ == '__main__':
+    speech('oton_sounds/sound01_start.wav')
